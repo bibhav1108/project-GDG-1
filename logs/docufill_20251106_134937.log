@@ -1,0 +1,26 @@
+2025-11-06T13:49:37.566302+0530 | INFO | Logging initialized at logs\docufill_20251106_134937.log
+2025-11-06T13:49:47.817030+0530 | INFO | OCR: C:/Users/shash/Downloads/Shashank_Dubey_Details.pdf
+2025-11-06T13:49:52.945052+0530 | ERROR | Gemini API error 404: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-11-06T13:49:54.532139+0530 | ERROR | Gemini API error 404: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-11-06T13:49:57.104988+0530 | ERROR | Gemini API error 404: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+

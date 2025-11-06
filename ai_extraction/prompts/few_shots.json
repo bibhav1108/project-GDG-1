@@ -1,0 +1,23 @@
+{
+  "examples": [
+    {
+      "input": "Applicant Name: Rohan Sharma\nDOB 03/05/2001\nPhone 9876543210\nAddress: 45 MG Road, Delhi 110001",
+      "output": {
+        "full_name": { "value": "Rohan Sharma", "confidence": 0.98, "rationale": "labelled" },
+        "dob": { "value": "03/05/2001", "confidence": 0.96, "rationale": "date pattern" },
+        "phone": { "value": "9876543210", "confidence": 0.95, "rationale": "10-digit" },
+        "address_line1": { "value": "45 MG Road", "confidence": 0.80, "rationale": "before city" },
+        "city": { "value": "Delhi", "confidence": 0.85, "rationale": "address segment" },
+        "postal_code": { "value": "110001", "confidence": 0.90, "rationale": "pincode" }
+      }
+    },
+    {
+      "input": "Mail ID: anita.singh@uni.ac.in\nGuardian Mobile: +91 98700 11122\nName Anita Kumari",
+      "output": {
+        "email": { "value": "anita.singh@uni.ac.in", "confidence": 0.97, "rationale": "explicit" },
+        "phone": { "value": "+919870011122", "confidence": 0.92, "rationale": "normalized" },
+        "full_name": { "value": "Anita Kumari", "confidence": 0.82, "rationale": "name hint" }
+      }
+    }
+  ]
+}

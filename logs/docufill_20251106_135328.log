@@ -1,0 +1,4 @@
+2025-11-06T13:53:28.632088+0530 | INFO | Logging initialized at logs\docufill_20251106_135328.log
+2025-11-06T13:53:39.104612+0530 | INFO | OCR: C:/Users/shash/Downloads/Shashank_Dubey_Details.pdf
+2025-11-06T13:55:21.462313+0530 | INFO | Saved record C:\Users\shash\.docufill_ai\records\26614e3c89da.json
+2025-11-06T13:55:35.861966+0530 | INFO | Saved record C:\Users\shash\.docufill_ai\records\26614e3c89da.json

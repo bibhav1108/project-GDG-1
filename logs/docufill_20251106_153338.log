@@ -1,0 +1,9 @@
+2025-11-06T15:33:38.447621+0530 | INFO | Logging initialized at logs\docufill_20251106_153338.log
+2025-11-06T15:33:49.316545+0530 | INFO | OCR: C:/Users/shash/OneDrive/Desktop/apoorva_srivastava_details.pdf
+2025-11-06T15:34:03.894706+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)
+2025-11-06T15:34:20.756377+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)
+2025-11-06T15:34:57.164066+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)
+2025-11-06T15:37:36.427766+0530 | INFO | OCR: C:/Users/shash/OneDrive/Desktop/apoorva_details.pdf
+2025-11-06T15:37:49.717477+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)
+2025-11-06T15:38:11.918418+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)
+2025-11-06T15:38:21.276595+0530 | ERROR | Failed to parse Gemini response: Expecting value: line 1 column 1 (char 0)

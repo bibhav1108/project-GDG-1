@@ -1,0 +1,32 @@
+{
+  "profile_name": "admission_form",
+  "domain": "apoorvasrivastava7.github.io",
+  "form_url": "https://apoorvasrivastava7.github.io/web_form/",
+  "mapping": {
+    "name": "input[name='name']",
+    "father_name": "input[name='father_name']",
+    "mother_name": "input[name='mother_name']",
+    "date_of_birth": "input[name='date_of_birth']",
+    "gender": "input[name='gender']",
+    "email": "input[name='email']",
+    "phone": "input[name='phone']",
+    "alternate_contact": "input[name='alternate_contact']",
+    "address": "textarea[name='address']",
+    "alternate_address": "textarea[name='alternate_address']",
+    "city": "input[name='city']",
+    "state": "input[name='state']",
+    "postal_code": "input[name='postal_code']",
+    "country": "input[name='country']",
+    "university_id": "input[name='university_id']",
+    "previous_school": "input[name='previous_school']",
+    "course_applying_for": "input[name='course_applying_for']",
+    "academic_year": "input[name='academic_year']",
+    "fees": "input[name='fees']",
+    "nationality": "input[name='nationality']",
+    "religion": "input[name='religion']",
+    "category": "input[name='category']",
+    "blood_group": "input[name='blood_group']",
+    "emergency_contact": "input[name='emergency_contact']"
+  },
+  "auto_submit": false
+}
