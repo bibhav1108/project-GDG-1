@@ -1,22 +1,32 @@
 {
   "examples": [
     {
-      "input": "Applicant Name: Rohan Sharma\nDOB 03/05/2001\nPhone 9876543210\nAddress: 45 MG Road, Delhi 110001",
+      "input": "Name: Apoorva Srivastava\nFather's Name: Mukesh Srivastava\nMother's Name: Deepali Srivastava\nDate of Birth: 05/07/2007\nGender: Female\nEmail: apoorvasrivastav007@gmail.com\nContact Number: 9555665004\nAlternate Contact: 9876543210\nPermanent Address: 62 Patel Nagar, Alambagh, Lucknow 226005\nAlternate Address: 69 Patel Nagar, Alambagh, Lucknow 226005\nCity: Lucknow\nState: Uttar Pradesh\nPostal Code: 226005\nCountry: India\nUniversity ID: 2401221540016\nPrevious School: Lucknow Public School\nCourse Applying For: B.Tech (CSE)\nAcademic Year: 2024-2028\nFees: 156000\nNationality: Indian\nReligion: Hindu\nCategory: General\nBlood Group: B+\nEmergency Contact: 9876543210",
       "output": {
-        "full_name": { "value": "Rohan Sharma", "confidence": 0.98, "rationale": "labelled" },
-        "dob": { "value": "03/05/2001", "confidence": 0.96, "rationale": "date pattern" },
-        "phone": { "value": "9876543210", "confidence": 0.95, "rationale": "10-digit" },
-        "address_line1": { "value": "45 MG Road", "confidence": 0.80, "rationale": "before city" },
-        "city": { "value": "Delhi", "confidence": 0.85, "rationale": "address segment" },
-        "postal_code": { "value": "110001", "confidence": 0.90, "rationale": "pincode" }
-      }
-    },
-    {
-      "input": "Mail ID: anita.singh@uni.ac.in\nGuardian Mobile: +91 98700 11122\nName Anita Kumari",
-      "output": {
-        "email": { "value": "anita.singh@uni.ac.in", "confidence": 0.97, "rationale": "explicit" },
-        "phone": { "value": "+919870011122", "confidence": 0.92, "rationale": "normalized" },
-        "full_name": { "value": "Anita Kumari", "confidence": 0.82, "rationale": "name hint" }
+        "full_name": { "value": "Apoorva Srivastava", "confidence": 0.98, "rationale": "labelled" },
+        "father_name": { "value": "Mukesh Srivastava", "confidence": 0.97, "rationale": "explicit label" },
+        "mother_name": { "value": "Deepali Srivastava", "confidence": 0.97, "rationale": "explicit label" },
+        "date_of_birth": { "value": "05/07/2007", "confidence": 0.96, "rationale": "date format" },
+        "gender": { "value": "Female", "confidence": 0.98, "rationale": "explicit label" },
+        "email": { "value": "apoorvasrivastav007@gmail.com", "confidence": 0.99, "rationale": "valid email format" },
+        "phone": { "value": "9555665004", "confidence": 0.98, "rationale": "10-digit phone" },
+        "alternate_contact": { "value": "9876543210", "confidence": 0.97, "rationale": "secondary phone number" },
+        "address_line1": { "value": "62 Patel Nagar, Alambagh", "confidence": 0.94, "rationale": "before city" },
+        "address_line2": { "value": "69 Patel Nagar, Alambagh", "confidence": 0.90, "rationale": "alternate address" },
+        "city": { "value": "Lucknow", "confidence": 0.95, "rationale": "detected in address" },
+        "state": { "value": "Uttar Pradesh", "confidence": 0.95, "rationale": "regional name" },
+        "postal_code": { "value": "226005", "confidence": 0.95, "rationale": "6-digit pincode" },
+        "country": { "value": "India", "confidence": 0.98, "rationale": "explicit label" },
+        "university_id": { "value": "2401221540016", "confidence": 0.97, "rationale": "numeric ID" },
+        "previous_school": { "value": "Lucknow Public School", "confidence": 0.96, "rationale": "school keyword" },
+        "course_applying_for": { "value": "B.Tech (CSE)", "confidence": 0.97, "rationale": "course pattern" },
+        "academic_year": { "value": "2024-2028", "confidence": 0.94, "rationale": "academic range" },
+        "fees": { "value": "156000", "confidence": 0.92, "rationale": "numeric fee amount" },
+        "nationality": { "value": "Indian", "confidence": 0.97, "rationale": "explicit nationality" },
+        "religion": { "value": "Hindu", "confidence": 0.96, "rationale": "explicit religion" },
+        "category": { "value": "General", "confidence": 0.96, "rationale": "reserved category" },
+        "blood_group": { "value": "B+", "confidence": 0.95, "rationale": "blood type" },
+        "emergency_contact": { "value": "9876543210", "confidence": 0.96, "rationale": "repeated emergency phone" }
       }
     }
   ]
