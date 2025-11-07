@@ -51,3 +51,4 @@ def load_profile(domain: str) -> Optional[Dict[str, Any]]:
     if not p.exists():
         return None
     return json.loads(p.read_text(encoding="utf-8"))
+
