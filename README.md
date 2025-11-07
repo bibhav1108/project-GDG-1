@@ -1,92 +1,129 @@
-#  DocuFill AI — Intelligent Document-to-Webform Autofiller
+🧠 DocuFill AI — Intelligent Document-to-Webform Autofiller
 
-DocuFill AI is a local desktop application that automates the process of *extracting data from documents (PDFs, images, DOCX)* and *auto-filling online forms* such as admission forms, government portals, and institutional websites — all while keeping your data secure on your device.
+DocuFill AI is a local desktop application that automates the process of extracting structured data (like name, DOB, email, phone, address, etc.) from PDFs, images, and DOCX documents, and auto-filling online forms such as institutional, government, and admission forms — all while keeping your data private and secure on your local device.
 
----
+🚩 Problem Statement
 
-##  Problem Statement
+Manual data entry from scanned or digital documents into online forms is slow, repetitive, and error-prone.
+Institutions and offices waste valuable time retyping data such as name, email, and ID across multiple portals.
 
-Manual data entry from scanned or digital documents into online forms is *slow, repetitive, and error-prone*  
-Institutions, universities, and offices waste valuable time retyping the same details (like name, DOB, email, address, etc.) across multiple portals.
+Challenges faced:
 
-*Challenges faced:*
-- Time-consuming manual entry  
-- OCR errors and formatting inconsistencies  
-- Difficulty mapping document data to form fields  
-- Limited accuracy for unlabeled fields  
+Time-consuming manual entry
 
----
+Frequent human errors and OCR inconsistencies
 
-##  Solution Approach
+Difficulty mapping extracted data to online form fields
 
-DocuFill AI leverages *OCR (Optical Character Recognition)* and *AI-powered field inference* to automatically detect, extract, and map key information from documents to corresponding form fields.
+Limited AI capability for unlabeled or ambiguous fields
 
-###  Key Features
+💡 Solution Approach
 
--  *Document Ingestion* — Upload PDFs, JPGs, PNGs, or DOCX files.
--  *AI Extraction (OCR + Gemini)* — Extracts structured data like name, DOB, address, email, phone, etc.
--  *Semantic Field Guessing* — Uses Gemini AI to infer unlabeled fields intelligently.
--  *Verification UI* — Edit and verify extracted data in a user-friendly Tkinter table.
--  *Form Autofill* — Automatically fills any online form using Selenium WebDriver (user manually clicks “Submit”).
--  *Privacy First* — All data processed locally; no cloud storage.
--  *Reusable Form Profiles* — Map once, reuse for similar institutional or admission forms.
+DocuFill AI uses a hybrid approach combining Tesseract OCR and Gemini AI to intelligently extract and interpret data from documents.
+It presents the extracted information in a Tkinter GUI for verification before automatically filling the desired web form using Selenium WebDriver.
 
----
+✨ Key Features
 
-##  Technology Stack
+🧾 Multi-format Upload: Accepts PDFs, JPGs, PNGs, and DOCX files
 
-| Component | Technology |
-|------------|-------------|
-| GUI | Tkinter |
-| OCR | Tesseract OCR, pdfplumber, OpenCV |
-| AI Inference | Gemini API (models/gemini-1.5-flash-latest) |
-| Web Automation | Selenium WebDriver |
-| Data Handling | Pandas, JSON, YAML |
-| Security | Python Cryptography (Fernet) |
-| Configuration | python-dotenv, settings.yaml |
-| Logging | Loguru |
+🤖 AI Extraction (OCR + Gemini): Recognizes and structures key fields
 
----
+🧠 Smart Field Guessing: Infers unlabeled fields semantically
 
-##  System Architecture Overview
+🧰 Verification Interface: Edit and confirm extracted values before autofill
 
-1. **OCR Module (ocr/)**  
-   Converts uploaded PDFs or images into readable text using pdfplumber + Tesseract + OpenCV preprocessing.
+🌐 Automated Webform Filling: Selenium-based, supports most websites
 
-2. **AI Extraction Module (ai_extraction/)**  
-   Sends extracted text to Gemini API for structured JSON output following the canonical schema.
+🔒 Local & Secure: Data never leaves your machine
 
-3. **Parsing & Validation (parsing/)**  
-   Cleans and validates extracted data (email, phone, postal code, DOB, etc.).
+💾 Reusable Profiles: Save field mappings for specific institutional forms
 
-4. **Datastore (datastore/)**  
-   Securely saves records locally, supports optional encryption and data masking.
+🧰 Technology Stack
+Component	            Technology Used
+GUI	                    Tkinter
+OCR	              Tesseract OCR, pdfplumber, OpenCV
+AI Inference	    Gemini API (gemini-1.5-flash-latest)
+Automation	          Selenium WebDriver
+Data Handling	      Pandas, JSON, YAML
+Security	          Python Cryptography (Fernet)
+Config & Env	     python-dotenv, settings.yaml
+Logging	                 Loguru
 
-5. **UI Layer (ui/)**  
-   Tkinter-based interface for document upload, preview, verification, and webform mapping.
 
-6. **Automation Module (automation/)**  
-   Uses Selenium to open a browser, locate form fields, and autofill them based on field mappings.
+🖥️ System Architecture Overview
 
----
+OCR Module (ocr/) – Extracts text from PDFs or images using Tesseract and preprocessing filters.
 
-##  Setup / Installation Instructions
+AI Extraction (ai_extraction/) – Uses Gemini API for structured JSON field mapping.
 
-### 1 Prerequisites
-- *Windows 10/11*
-- *Python 3.10+*
-- *Tesseract OCR*
-  - Download from: https://github.com/UB-Mannheim/tesseract/wiki
-  - Default install path: C:\Program Files\Tesseract-OCR\tesseract.exe
-- *Chrome Browser + ChromeDriver*
-- *Poppler for Windows* (for pdf2image)
-  - Download from: https://github.com/oschwartz10612/poppler-windows/releases
-  - Add Poppler /bin folder to PATH
+Parsing & Validation (parsing/) – Validates email, phone, DOB, postal codes, etc.
 
-### 2 Clone or Download Project
-```bash
-git clone https://github.com/bibhav1108/project-GDG-1
-cd project-GDG-1
+Datastore (datastore/) – Encrypts and securely stores local data.
 
-The website we are using to implement our prototype 
+UI Layer (ui/) – Tkinter-based interface for file upload, preview, and mapping.
+
+Automation (automation/) – Uses Selenium to locate and auto-fill fields in web forms.
+
+⚙️ Setup / Installation Instructions
+1️⃣ Prerequisites
+
+Windows 10 or 11
+
+Python 3.10+
+
+Tesseract OCR
+
+Download: Tesseract OCR (UB Mannheim)
+
+Default Path: C:\Program Files\Tesseract-OCR\tesseract.exe
+
+Chrome Browser + ChromeDriver
+
+Poppler for Windows (for PDF support)
+
+Download: Poppler Releases
+
+Add /bin folder to system PATH
+
+2️⃣ Clone or Download the Project
+git clone https://github.com/bibhav1108/docufill-ai.git
+cd docufill-ai
+
+3️⃣ Install Dependencies
+pip install -r requirements.txt
+
+4️⃣ Configure Environment
+
+Create a .env file in the root directory:
+
+GEMINI_API_KEY=your_api_key_here
+
+▶️ How to Run the Project
+
+Launch the app:
+
+python app.py
+
+
+Upload one or more documents (PDF, JPG, PNG, DOCX).
+
+Click “Extract Data” → AI will process and display extracted fields.
+
+Verify and edit the table entries in the preview window.
+
+Enter the target web form URL.
 https://apoorvasrivastava7.github.io/web_form/
+
+Click “Auto-Fill Form” → Selenium fills the fields automatically.
+
+Review the log window for success messages or skipped fields.
+
+👥 Team Members
+Name	                    Role
+Bibhav Upadhyay	  Project Lead / Developer
+Shashank Dubey      AI Prompting + PPT
+Apoorva Srivastava  web-development(sample_website)
+
+📄 License
+
+This project is open-source for academic and educational use
