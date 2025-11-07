@@ -49,3 +49,4 @@ def ocr_file(path: str, max_pages: int = None) -> List[Dict]:
         rec["source_file"] = safe_basename(path)
         out.append(rec)
     return out
+
