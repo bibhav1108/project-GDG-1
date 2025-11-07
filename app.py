@@ -16,3 +16,4 @@ from ui.main_window import run_app  # import after load_dotenv
 
 if __name__ == "__main__":
     sys.exit(run_app())
+
