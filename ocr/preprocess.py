@@ -39,3 +39,4 @@ def preprocess_bgr(bgr_img):
     gray = upscale_dpi(gray, 300)
     th = threshold(gray)
     return th
+
