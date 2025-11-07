@@ -106,3 +106,5 @@ def validate_field(field: str, value: str) -> Tuple[bool, float]:
 
     # Default fallback
     return validate_text(value)
+
+
