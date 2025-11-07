@@ -57,3 +57,5 @@ class MappingEditor(tk.Toplevel):
             mapping[field] = selector
         save_profile(domain, {"domain": domain, "mapping": mapping})
         messagebox.showinfo("Saved", "Profile saved successfully.")
+
+
