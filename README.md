@@ -106,6 +106,7 @@ python app.py
 
 
 Upload one or more documents (PDF, JPG, PNG, DOCX).
+(Choose the pdf stored in sample/docs folder)
 
 Click “Extract Data” → AI will process and display extracted fields.
 
