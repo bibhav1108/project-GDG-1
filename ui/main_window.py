@@ -1,3 +1,5 @@
+# file: ui/main_window.py
+import json
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from urllib.parse import urlparse
@@ -21,6 +23,7 @@ from automation.locators import suggest_mapping_for_page
 from automation.filler import autofill_with_mapping
 from ui.dialogs import show_error, show_info, show_summary
 
+
 def run_app():
     setup_logging()
     root = tk.Tk()
@@ -38,7 +41,7 @@ def run_app():
     frm = ttk.Frame(root)
     frm.pack(fill=tk.BOTH, expand=True)
 
-    # Top controls
+    # ---------------------- Top Controls ----------------------
     top = ttk.Frame(frm)
     top.pack(fill=tk.X, padx=8, pady=6)
 
@@ -49,7 +52,7 @@ def run_app():
         )
         if paths:
             state["files"] = list(paths)
-            show_info(f"Selected {len(paths)} files.")
+            show_info(f"Selected {len(paths)} file(s).")
 
     def build_rows(flat: dict, src_file: str, page: int, conf: float):
         rows = []
@@ -86,6 +89,9 @@ def run_app():
                         show_error(f"Gemini error: {e}")
                         return
                     flat = normalize_ai_output(ai)
+                    print("\n🔍 Extracted Keys:", list(flat.keys()))
+                    print("📦 Extracted Data:", json.dumps(flat, indent=2))
+
                     flat["source_file"] = rec["source_file"]
                     flat["page"] = rec["page"]
                     conf = float(flat.get("confidence", 0.0))
@@ -94,10 +100,10 @@ def run_app():
                         flat["full_name"] = title_case_name(flat["full_name"])
                     if flat.get("phone"):
                         flat["phone"] = normalize_phone(flat["phone"])
-                    if flat.get("dob"):
-                        date_norm, c = parse_date(flat["dob"])
+                    if flat.get("date_of_birth"):
+                        date_norm, c = parse_date(flat["date_of_birth"])
                         if date_norm:
-                            flat["dob"] = date_norm
+                            flat["date_of_birth"] = date_norm
                     # Heuristic: split address into line1/line2 if combined
                     if not flat.get("address_line1") and flat.get("address_line2"):
                         addr = split_address(flat["address_line2"])
@@ -121,10 +127,12 @@ def run_app():
     ttk.Button(top, text="Select Files", command=on_select_files).pack(side=tk.LEFT, padx=4)
     ttk.Button(top, text="Extract (OCR + AI)", command=on_extract).pack(side=tk.LEFT, padx=4)
 
+    # ---------------------- URL Input ----------------------
     url_var = tk.StringVar()
     ttk.Entry(top, textvariable=url_var, width=60).pack(side=tk.LEFT, padx=6)
     ttk.Label(top, text=" Form URL").pack(side=tk.LEFT)
 
+    # ---------------------- Mapping Editor ----------------------
     def on_open_mapping():
         url = url_var.get().strip()
         if not url:
@@ -143,6 +151,7 @@ def run_app():
 
     ttk.Button(top, text="Open Mapping Editor", command=on_open_mapping).pack(side=tk.LEFT, padx=4)
 
+    # ---------------------- Autofill ----------------------
     def on_autofill():
         url = url_var.get().strip()
         if not url:
@@ -152,18 +161,25 @@ def run_app():
         if not state.get("table"):
             show_error("Nothing to fill. Extract first.")
             return
+
         data = state["table"].as_dict()
-        # Save record locally
         save_record({"domain": domain, "data": data})
+
         drv = get_driver()
-        success, failed = 0, 0
         try:
             drv.get(url)
-            # Use latest suggestions (user may have saved profile too)
-            success, failed = autofill_with_mapping(drv, domain, data)
+            logger.info(f"Starting autofill for domain={domain}, url={url}")
+
+            # ✅ Fixed: Added missing URL parameter and removed unpacking
+            autofill_with_mapping(drv, url, domain, data)
+
+            show_info("✅ Autofill completed — review the form and submit manually.")
+        except Exception as e:
+            logger.error(f"Autofill error: {e}")
+            messagebox.showerror("Autofill Error", str(e))
         finally:
+            input("Press ENTER to close the browser after review...")
             drv.quit()
-        show_summary(success, failed)
 
     ttk.Button(top, text="Run Autofill", command=on_autofill).pack(side=tk.LEFT, padx=4)
 
