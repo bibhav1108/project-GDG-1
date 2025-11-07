@@ -19,4 +19,3 @@ def get_fernet(enable: bool) -> Optional[Fernet]:
 
     # Return a valid Fernet instance
     return Fernet(key.encode("utf-8"))
-
