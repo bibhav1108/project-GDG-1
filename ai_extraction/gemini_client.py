@@ -7,14 +7,15 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 from loguru import logger
 from common.config import settings
 from common.utils import normalize_whitespace
+from ai_extraction.normalize import filter_to_schema  # new import
 
 # --------------------------
 # Gemini API endpoint (v1beta)
 # --------------------------
-# Use the full model ID, as required by the latest API.
 GEMINI_ENDPOINT = (
     "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 )
+
 
 class GeminiError(Exception):
     """Custom error class for Gemini-related issues."""
@@ -39,18 +40,18 @@ FEW_SHOTS = _load_json("ai_extraction/prompts/few_shots.json")
 def _make_prompt(ocr_text: str, hints: Optional[Dict] = None) -> Dict:
     """
     Build the Gemini API prompt request with few-shot examples.
-    This guides the model to return structured JSON following the canonical schema.
+    Guides the model to return structured JSON following the canonical schema.
     """
     sys_rules = (
-        "You are an expert document parser for admission forms and identity forms. "
-        "Always return JSON only — no explanations or text outside JSON. "
-        "Each key must exist in the schema. "
-        "Each field must have 'value', 'confidence' (0-1), and 'rationale' (max 15 words). "
-        "Missing or uncertain fields should have an empty string and confidence=0. "
-        "Be robust to OCR noise, abbreviations, and label variations."
+        "You are an expert document parser for admission and institutional forms. "
+        "Return ONLY valid JSON — no explanations or text outside JSON. "
+        "Use exactly these field names from the canonical schema. "
+        "Each field must have 'value', 'confidence' (0–1), and 'rationale' (<=15 words). "
+        "If a field is missing, leave 'value' empty and confidence=0. "
+        "Be robust to OCR noise, formatting errors, and partial labels."
     )
 
-    # Few-shot examples help Gemini learn the expected JSON structure
+    # Few-shot examples guide Gemini to consistent structure
     examples = FEW_SHOTS.get("examples", [])
     content = [
         {"role": "user", "parts": [{"text": sys_rules}]},
@@ -61,7 +62,7 @@ def _make_prompt(ocr_text: str, hints: Optional[Dict] = None) -> Dict:
         content.append({"role": "user", "parts": [{"text": ex["input"]}]})
         content.append({"role": "model", "parts": [{"text": json.dumps(ex["output"], indent=2)}]})
 
-    # Add user OCR text
+    # Add current OCR text
     user_text = "OCR TEXT:\n" + normalize_whitespace(ocr_text)
     if hints:
         user_text += "\n\nHINTS:\n" + json.dumps(hints, indent=2)
@@ -87,9 +88,9 @@ def extract_structured_data(ocr_text: str, hints: Optional[Dict] = None) -> Dict
     """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        raise GeminiError("GEMINI_API_KEY missing in environment.")
+        raise GeminiError("❌ GEMINI_API_KEY missing in environment (.env file).")
 
-    # Use full model ID for current Gemini version
+    # Use full model ID for Gemini
     model = settings.get("ai.model", "models/gemini-1.5-flash-latest")
     url = GEMINI_ENDPOINT.format(model=model)
 
@@ -98,22 +99,41 @@ def extract_structured_data(ocr_text: str, hints: Optional[Dict] = None) -> Dict
     params = {"key": api_key}
 
     try:
-        resp = requests.post(url, params=params, headers=headers, data=json.dumps(payload), timeout=60)
+        resp = requests.post(url, params=params, headers=headers, data=json.dumps(payload), timeout=90)
     except requests.exceptions.RequestException as e:
-        raise GeminiError(f"Network error calling Gemini API: {e}")
+        raise GeminiError(f"🌐 Network error calling Gemini API: {e}")
 
     if resp.status_code >= 400:
-        logger.error("Gemini API error {}: {}", resp.status_code, resp.text[:2000])
-        raise GeminiError(f"HTTP {resp.status_code}: {resp.text[:500]}")
+        logger.error("Gemini API error {}: {}", resp.status_code, resp.text[:1000])
+        raise GeminiError(f"HTTP {resp.status_code}: {resp.text[:400]}")
 
     data = resp.json()
 
-    # Extract model’s generated JSON from response
+    # --------------------------
+    # Extract model JSON response
+    # --------------------------
     try:
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
         parsed = json.loads(text)
-        logger.info("Gemini extraction successful: {} keys parsed", len(parsed))
-        return parsed
+        logger.info("✅ Gemini extraction successful: {} fields parsed", len(parsed))
+
+        # Filter output strictly to canonical schema
+        canonical_fields = CANONICAL.get("fields", [])
+        filtered = filter_to_schema(parsed, canonical_fields)
+
+        # Validate output structure
+        for field in canonical_fields:
+            if field not in filtered:
+                filtered[field] = {"value": "", "confidence": 0.0, "rationale": "missing"}
+
+        return filtered
+
+    except json.JSONDecodeError as e:
+        logger.error("❌ Gemini returned invalid JSON: {}", e)
+        raise GeminiError("Invalid JSON format returned by Gemini.")
+    except KeyError as e:
+        logger.error("❌ Unexpected response structure: {}", e)
+        raise GeminiError("Unexpected API response format.")
     except Exception as e:
-        logger.error("Failed to parse Gemini response: {}", e)
-        raise GeminiError("Invalid JSON from Gemini model.")
+        logger.error("⚠️ Unknown parsing error: {}", e)
+        raise GeminiError(str(e))
